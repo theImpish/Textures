@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34321.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Textures", "Textures\Textures.vcxproj", "{937C34FD-CBB8-4E4E-AD38-D99654B51736}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{937C34FD-CBB8-4E4E-AD38-D99654B51736}.Debug|x64.ActiveCfg = Debug|x64
+		{937C34FD-CBB8-4E4E-AD38-D99654B51736}.Debug|x64.Build.0 = Debug|x64
+		{937C34FD-CBB8-4E4E-AD38-D99654B51736}.Debug|x86.ActiveCfg = Debug|Win32
+		{937C34FD-CBB8-4E4E-AD38-D99654B51736}.Debug|x86.Build.0 = Debug|Win32
+		{937C34FD-CBB8-4E4E-AD38-D99654B51736}.Release|x64.ActiveCfg = Release|x64
+		{937C34FD-CBB8-4E4E-AD38-D99654B51736}.Release|x64.Build.0 = Release|x64
+		{937C34FD-CBB8-4E4E-AD38-D99654B51736}.Release|x86.ActiveCfg = Release|Win32
+		{937C34FD-CBB8-4E4E-AD38-D99654B51736}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BAF13F8B-78E9-497F-8AD7-778469ACFD47}
+	EndGlobalSection
+EndGlobal
