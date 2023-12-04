@@ -24,6 +24,8 @@ int main()
     GLuint vertexBuffer;
     glGenBuffers(1, &vertexBuffer);
 
+    float
+
     printf("%u\n", vertexBuffer);
 
     while(!glfwWindowShouldClose(window))
