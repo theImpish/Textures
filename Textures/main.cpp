@@ -25,21 +25,19 @@ const GLchar* vertexSource = R"glsl(
 )glsl";
 const GLchar* fragmentSource = R"glsl(
 	#version 150 core
-    in vec3 Color;
-    in vec2 Texcoord;
-
+	in vec3 Color;
+	in vec2 Texcoord;
 	out vec4 outColor;
-        
-    uniform sampler2D texKitten;
-    uniform sampler2D texPuppy;
-    uniform float time;    
-
+	uniform sampler2D texKitten;
+	uniform float time;
 	void main()
 	{
-        float factor = (sin(time * 3.0) + 1.0) / 2.0;
-        vec4 colKitten = texture(texKitten, Texcoord);
-        vec4 colPuppy = texture(texPuppy, Texcoord);
-		outColor = mix(colKitten, colPuppy, factor);
+		if (Texcoord.y < 0.5)
+			outColor = texture(texKitten, Texcoord);
+		else
+			outColor = texture(texKitten,
+				vec2(Texcoord.x + sin(Texcoord.y * 60.0 + time * 2.0) / 30.0, 1.0 - Texcoord.y)
+			) * vec4(0.7, 0.7, 1.0, 1.0);
 	}
 )glsl";
 
@@ -128,35 +126,55 @@ int main()
     glEnableVertexAttribArray(texAttrib);
     glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(5 * sizeof(GLfloat)));
 
+    //// Load texture
+    //GLuint textures[2];
+    //glGenTextures(2, textures);
+
+    //int width, height;
+    //unsigned char* image;
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, textures[0]);
+    //image = SOIL_load_image("Assets/kitten.png", &width, &height, 0, SOIL_LOAD_RGB);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    //SOIL_free_image_data(image);
+    //glUniform1i(glGetUniformLocation(shaderProgram, "texKitten"), 0);
+
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    //glActiveTexture(GL_TEXTURE1);
+    //glBindTexture(GL_TEXTURE_2D, textures[1]);
+    //image = SOIL_load_image("Assets/puppy.png", &width, &height, 0, SOIL_LOAD_RGB);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    //SOIL_free_image_data(image);
+    //glUniform1i(glGetUniformLocation(shaderProgram, "texPuppy"), 1);
+
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     // Load texture
-    GLuint textures[2];
-    glGenTextures(2, textures);
+    GLuint tex;
+    glGenTextures(1, &tex);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex);
 
     int width, height;
-    unsigned char* image;
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textures[0]);
-    image = SOIL_load_image("Assets/kitten.png", &width, &height, 0, SOIL_LOAD_RGB);
+    unsigned char* image = SOIL_load_image("Assets/kitten.png", &width, &height, 0, SOIL_LOAD_RGB);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     SOIL_free_image_data(image);
+
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     glUniform1i(glGetUniformLocation(shaderProgram, "texKitten"), 0);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, textures[1]);
-    image = SOIL_load_image("Assets/puppy.png", &width, &height, 0, SOIL_LOAD_RGB);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    SOIL_free_image_data(image);
-    glUniform1i(glGetUniformLocation(shaderProgram, "texPuppy"), 1);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     GLint uniTime = glGetUniformLocation(shaderProgram, "time");
 
