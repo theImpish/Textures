@@ -29,15 +29,17 @@ const GLchar* fragmentSource = R"glsl(
     in vec2 Texcoord;
 
 	out vec4 outColor;
-    
+        
     uniform sampler2D texKitten;
     uniform sampler2D texPuppy;
+    uniform float time;    
 
 	void main()
 	{
+        float factor = (sin(time * 3.0) + 1.0) / 2.0;
         vec4 colKitten = texture(texKitten, Texcoord);
         vec4 colPuppy = texture(texPuppy, Texcoord);
-		outColor = mix(colKitten, colPuppy, 0.5);
+		outColor = mix(colKitten, colPuppy, factor);
 	}
 )glsl";
 
@@ -156,6 +158,8 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    GLint uniTime = glGetUniformLocation(shaderProgram, "time");
+
     while (!glfwWindowShouldClose(window))
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -165,8 +169,12 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Set the time Uniform
+        auto t_now = std::chrono::high_resolution_clock::now();
+        float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
+        glUniform1f(uniTime, time);
+
         // Draw a triangle from the 3 vertices
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
